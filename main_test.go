@@ -2,7 +2,6 @@ package linalg
 
 import (
 	"flag"
-	"fmt"
 	"os"
 	"testing"
 )
@@ -144,32 +143,51 @@ func TestSolveDiagonalSystem(t *testing.T) {
 }
 
 func TestSolveSystem(t *testing.T) {
-	testM := NewMatrix([][]float64{
-		{1, 1, 1},
-		{0, 2, 5},
-		{2, 5, -1},
-	})
-	testV := NewVector([]float64{6, -4, 27})
-	fmt.Println(testM.SolveSystem(testV))
+	// testM := NewMatrix([][]float64{
+	// {1, 1, 1},
+	// {0, 2, 5},
+	// {2, 5, -1},
+	// })
+	// testV := NewVector([]float64{6, -4, 27})
+	// fmt.Println(testM.SolveSystem(testV))
 }
 
 func TestMatrixIsUpperDiagonal(t *testing.T) {
-	// temp := NewMatrix([][]float64{
-	// {1, 0, 0, 0, 0},
-	// {3, 4, 0, 0, 0},
-	// {0, 2, 3, 0, 0},
-	// {3, 2, 1, 4, 0},
-	// })
-	// fmt.Println(temp.IsUpperDiagonal())
+	lowerDiagonal := NewMatrix([][]float64{
+		{1, 0, 0, 0, 0},
+		{3, 4, 0, 0, 0},
+		{0, 2, 3, 0, 0},
+		{3, 2, 1, 4, 0},
+	})
+	if lowerDiagonal.IsUpperDiagonal() || !lowerDiagonal.IsLowerDiagonal() {
+		t.Errorf("Expected false/true result from IsUpperDiagonal/IsLowerDiagonal method of lowerDiagonal matrix.")
+	}
+	if !lowerDiagonal.Transpose().IsUpperDiagonal() || lowerDiagonal.Transpose().IsLowerDiagonal() {
+		t.Errorf("Expected true/false result from IsUpperDiagonal/IsLowerDiagonal method of lowerDiagonal transpose matrix.")
+	}
 }
 
 func TestMatrixEye(t *testing.T) {
-	// fmt.Println(Eye(5))
+	expected := NewMatrix([][]float64{
+		{1, 0, 0, 0},
+		{0, 1, 0, 0},
+		{0, 0, 1, 0},
+		{0, 0, 0, 1},
+	})
+	if !Eye(4).Equal(expected) {
+		t.Errorf("Expected different values of identity matrix.")
+	}
 }
 
 func TestMatrixRowOperation(t *testing.T) {
-	// temp := Eye(5)
-	// fmt.Println(temp.RowOperation(2, 1, 4))
+	expected := NewMatrix([][]float64{
+		{1, 2, 3, 4},
+		{7, 10, 13, 16},
+		{9, 10, 11, 12},
+	})
+	if !m.RowOperation(1, 0, 2).Equal(expected) {
+		t.Errorf("Expected different values of RowOperation result.")
+	}
 }
 
 func TestMatrixEqual(t *testing.T) {

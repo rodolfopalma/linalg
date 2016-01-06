@@ -263,6 +263,8 @@ func (m MatrixStructure) SolveSystem(v VectorStructure) VectorStructure {
 	}
 }
 
+// Performs the following row operation:
+// m[row] = m[row] + factor * m[otherRow]
 func (m MatrixStructure) RowOperation(row int, otherRow int, factor float64) MatrixStructure {
 	E := Eye(m.Shape()[0])
 	E[row][otherRow] = factor
