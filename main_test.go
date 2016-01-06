@@ -171,3 +171,33 @@ func TestMatrixRowOperation(t *testing.T) {
 	// temp := Eye(5)
 	// fmt.Println(temp.RowOperation(2, 1, 4))
 }
+
+func TestMatrixEqual(t *testing.T) {
+	// Equal matrix.
+	m2 := NewMatrix([][]float64{
+		{1, 2, 3, 4},
+		{5, 6, 7, 8},
+		{9, 10, 11, 12},
+	})
+	if !m.Equal(m2) {
+		t.Errorf("Expected matrix Equal method to return true, but it was false...")
+	}
+	// Different shape matrix.
+	m2 = NewMatrix([][]float64{
+		{1, 2, 3},
+		{5, 6, 7},
+		{9, 10, 11},
+	})
+	if m.Equal(m2) {
+		t.Errorf("Expected matrix Equal method to return false (different shape), but it was true...")
+	}
+	// Same shape, different values
+	m2 = NewMatrix([][]float64{
+		{1, 2, 3, 4},
+		{5, 6, 7, 8},
+		{0, 10, 11, 12},
+	})
+	if m.Equal(m2) {
+		t.Errorf("Expected matrix Equal method to return false (different values), but it was true...")
+	}
+}

@@ -268,3 +268,19 @@ func (m MatrixStructure) RowOperation(row int, otherRow int, factor float64) Mat
 	E[row][otherRow] = factor
 	return E.Mul(m)
 }
+
+func (m MatrixStructure) Equal(m2 MatrixStructure) bool {
+	shape_1 := m.Shape()
+	shape_2 := m2.Shape()
+	if shape_1[0] != shape_2[0] || shape_1[1] != shape_2[1] {
+		return false
+	}
+	for i, row := range m {
+		for j, value := range row {
+			if value != m2[i][j] {
+				return false
+			}
+		}
+	}
+	return true
+}
