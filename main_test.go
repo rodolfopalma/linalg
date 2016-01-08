@@ -245,3 +245,19 @@ func TestMatrixEqual(t *testing.T) {
 		t.Errorf("Expected matrix Equal method to return false (different values), but it was true...")
 	}
 }
+
+func TestMatrixInverse(t *testing.T) {
+	m2 := NewMatrix([][]float64{
+		{1, 2, 3},
+		{0, 1, 4},
+		{5, 6, 0},
+	})
+	expected := NewMatrix([][]float64{
+		{-24, 18, 5},
+		{20, -15, -4},
+		{-5, 4, 1},
+	})
+	if inverse := m2.Inverse(); !inverse.Equal(expected) {
+		t.Errorf("Expected different matrix from inverse method.")
+	}
+}

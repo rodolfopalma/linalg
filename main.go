@@ -294,13 +294,30 @@ func (m MatrixStructure) Equal(m2 MatrixStructure) bool {
 	return true
 }
 
+func (m MatrixStructure) Inverse() MatrixStructure {
+	shape := m.Shape()
+	// If it isn't a square matrix compute the generalized inverse.
+	if shape[0] != shape[1] {
+		m = m.Transpose().Mul(m)
+	}
+	inverseValuesTransposed := make([][]float64, 0)
+	for i := 0; i < shape[1]; i++ {
+		e := make([]float64, shape[1])
+		e[i] = 1
+		e = NewVector(e)
+		col := m.SolveSystem(e)
+		inverseValuesTransposed = append(inverseValuesTransposed, col)
+	}
+	inverseTransposed := NewMatrix(inverseValuesTransposed)
+	return inverseTransposed.Transpose()
+}
+
 func (m MatrixStructure) String() string {
-	str := "-\n"
+	str := "\n"
 	for i, row := range m {
 		if i > 0 {
 			str += "\n"
 		}
-		str += "|"
 		for j, value := range row {
 			str += fmt.Sprintf("%0.2f", value)
 			if j != len(row)-1 {
