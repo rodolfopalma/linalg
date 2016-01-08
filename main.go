@@ -1,6 +1,13 @@
 package linalg
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
+
+const (
+	NEARLY_EQUAL_TOLERANCE = 0.00001
+)
 
 type VectorStructure []float64
 
@@ -57,7 +64,7 @@ func (v VectorStructure) Equal(v2 VectorStructure) bool {
 		return false
 	}
 	for i, value := range v {
-		if value != v2[i] {
+		if math.Abs(value-v2[i]) > NEARLY_EQUAL_TOLERANCE {
 			return false
 		}
 	}
@@ -234,7 +241,7 @@ func (m MatrixStructure) SolveDiagonalSystem(v VectorStructure) VectorStructure 
 		for row := 1; row < matrixShape[0]; row++ {
 			value := v[row]
 			for col := 0; col < row; col++ {
-				value = value - m[row][col]*v[col]
+				value = value - m[row][col]*solutionValues[col]
 			}
 			solutionValues[row] = value / m[row][row]
 		}
@@ -243,7 +250,7 @@ func (m MatrixStructure) SolveDiagonalSystem(v VectorStructure) VectorStructure 
 		for row := matrixShape[0] - 2; row >= 0; row-- {
 			value := v[row]
 			for col := row + 1; col < matrixShape[1]; col++ {
-				value = value - m[row][col]*v[col]
+				value = value - m[row][col]*solutionValues[col]
 			}
 			solutionValues[row] = value / m[row][row]
 		}
@@ -279,10 +286,27 @@ func (m MatrixStructure) Equal(m2 MatrixStructure) bool {
 	}
 	for i, row := range m {
 		for j, value := range row {
-			if value != m2[i][j] {
+			if math.Abs(value-m2[i][j]) > NEARLY_EQUAL_TOLERANCE {
 				return false
 			}
 		}
 	}
 	return true
+}
+
+func (m MatrixStructure) String() string {
+	str := "-\n"
+	for i, row := range m {
+		if i > 0 {
+			str += "\n"
+		}
+		str += "|"
+		for j, value := range row {
+			str += fmt.Sprintf("%0.2f", value)
+			if j != len(row)-1 {
+				str += " "
+			}
+		}
+	}
+	return str + "\n"
 }
