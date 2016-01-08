@@ -131,25 +131,51 @@ func TestMatrixMap(t *testing.T) {
 }
 
 func TestMatrixLUDecomposition(t *testing.T) {
-	// L, U := m.Mul(m.Transpose()).LUDecomposition()
-	// fmt.Println(m.Mul(m.Transpose()), L, U, L.Mul(U))
+	seed := NewMatrix([][]float64{
+		{1, 2, 3},
+		{2, -4, 6},
+		{3, -9, -3},
+	})
+	L, U := seed.LUDecomposition()
+	if !L.Mul(U).Equal(seed) {
+		t.Errorf("Expected L times U to be equal to original matrix.")
+	}
 }
 
 func TestSolveDiagonalSystem(t *testing.T) {
-	// testM := Eye(3)
-	// testM[0][1] = 3
-	// testV := NewVector([]float64{1, 2, 4})
-	// fmt.Println(testM.SolveDiagonalSystem(testV))
+	lowerDiagonalMatrix := NewMatrix([][]float64{
+		{1, 0, 0},
+		{2, -8, 0},
+		{3, -15, -12},
+	})
+	b := NewVector([]float64{5, 18, 6})
+	expected := NewVector([]float64{5, -1, 2})
+	if result := lowerDiagonalMatrix.SolveSystem(b); !result.Equal(expected) {
+		t.Errorf("Expected %v vector while solving lower diagonal system, but it was %v...", expected, result)
+	}
+	upperDiagonalMatrix := NewMatrix([][]float64{
+		{1, 2, 3},
+		{0, 1, 0},
+		{0, 0, 1},
+	})
+	b = NewVector([]float64{5, -1, 2})
+	expected = NewVector([]float64{1, -1, 2})
+	if result := upperDiagonalMatrix.SolveSystem(b); !result.Equal(expected) {
+		t.Errorf("Expected %v vector while solving upper diagonal system, but it was %v...", expected, result)
+	}
 }
 
 func TestSolveSystem(t *testing.T) {
-	// testM := NewMatrix([][]float64{
-	// {1, 1, 1},
-	// {0, 2, 5},
-	// {2, 5, -1},
-	// })
-	// testV := NewVector([]float64{6, -4, 27})
-	// fmt.Println(testM.SolveSystem(testV))
+	A := NewMatrix([][]float64{
+		{3, 3, 4},
+		{3, 5, 9},
+		{5, 9, 17},
+	})
+	b := NewVector([]float64{1, 2, 4})
+	expected := NewVector([]float64{1, -2, 1})
+	if result := A.SolveSystem(b); !result.Equal(expected) {
+		t.Errorf("Expected %v vector while solving system, but it was %v...", expected, result)
+	}
 }
 
 func TestMatrixIsUpperDiagonal(t *testing.T) {
